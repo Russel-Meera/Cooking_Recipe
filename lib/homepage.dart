@@ -12,7 +12,11 @@ class MyLandingPage extends StatefulWidget {
 
 class _MyLandingPageState extends State<MyLandingPage> {
   int _selectedPage = 0;
-  final _pageOption = const [MyDishesGrid(), SearchPage(), MyFavourites()];
+  final _pageOption = [
+    const MyDishesGrid(),
+    const SearchPage(),
+    const MyFavourites()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +24,7 @@ class _MyLandingPageState extends State<MyLandingPage> {
       appBar: AppBar(
         title: const Text('Reciply'),
         centerTitle: true,
+        backgroundColor: Colors.amber[400],
         // actions: [
         //   IconButton(onPressed: () {}, icon: const Icon(Icons.bookmark))
         // ],

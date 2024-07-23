@@ -28,9 +28,10 @@ class _RecipeDetailsState extends State<RecipeDetails> {
     });
   }
 
-  void toggleSave() {
+  void toggleSave() async {
     setState(() {
       if (isSaved) {
+        FavList.removeDish(widget.dish);
       } else {
         FavList.addDish(widget.dish);
       }
@@ -43,6 +44,12 @@ class _RecipeDetailsState extends State<RecipeDetails> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.dish.name),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.share),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -55,84 +62,88 @@ class _RecipeDetailsState extends State<RecipeDetails> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.dish.name,
-                    style: GoogleFonts.robotoSlab(
-                      textStyle: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              widget.dish.name,
+                              style: GoogleFonts.robotoSlab(
+                                textStyle: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              isLiked ? Icons.favorite : Icons.favorite_border,
+                              color: isLiked ? Colors.red : Colors.grey,
+                            ),
+                            onPressed: toggleLike,
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              isSaved ? Icons.bookmark : Icons.bookmark_border,
+                              color: isSaved ? Colors.blue : Colors.grey,
+                            ),
+                            onPressed: toggleSave,
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Category: ${widget.dish.category}',
-                    style: GoogleFonts.robotoSlab(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                      const SizedBox(height: 8),
+                      Text(
+                        'Category: ${widget.dish.category}',
+                        style: GoogleFonts.robotoSlab(
+                          textStyle: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.dish.description,
-                    style: GoogleFonts.robotoSlab(
-                      textStyle: const TextStyle(
-                        fontSize: 16,
+                      const SizedBox(height: 8),
+                      Text(
+                        'Description: ${widget.dish.description}',
+                        style: GoogleFonts.robotoSlab(
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Recipe:',
-                    style: GoogleFonts.robotoSlab(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(height: 8),
+                      Text(
+                        'Recipe:',
+                        style: GoogleFonts.robotoSlab(
+                          textStyle: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.dish.recipe,
-                    style: GoogleFonts.robotoSlab(
-                      textStyle: const TextStyle(
-                        fontSize: 16,
+                      Text(
+                        widget.dish.recipe,
+                        style: GoogleFonts.robotoSlab(
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                icon: Icon(
-                  isLiked ? Icons.favorite : Icons.favorite_border,
-                  color: isLiked ? Colors.red : Colors.grey,
-                ),
-                onPressed: toggleLike,
-              ),
-              IconButton(
-                icon: Icon(
-                  isSaved ? Icons.bookmark : Icons.bookmark_border,
-                  color: isSaved ? Colors.blue : Colors.grey,
-                ),
-                onPressed: toggleSave,
-              ),
-            ],
-          ),
         ),
       ),
     );

@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:cookingrecipe/list/favlist.dart';
 import 'package:cookingrecipe/widgets/myfavgridview.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class MyFavourites extends StatelessWidget {
+class MyFavourites extends StatefulWidget {
   const MyFavourites({super.key});
+
+  @override
+  _MyFavouritesState createState() => _MyFavouritesState();
+}
+
+class _MyFavouritesState extends State<MyFavourites> {
+  @override
+  void initState() {
+    super.initState();
+    FavList.init().then((_) {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +25,16 @@ class MyFavourites extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Saved Recipe'),
+        title: Text(
+          "Saved Recipe",
+          style: GoogleFonts.robotoSlab(
+            textStyle: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.amber[400],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

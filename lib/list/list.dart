@@ -15,6 +15,28 @@ class Dish {
     required this.recipe,
   });
 
+  factory Dish.fromJson(Map<String, dynamic> json) {
+    return Dish(
+      id: json['id'],
+      name: json['name'],
+      category: json['category'],
+      description: json['description'],
+      imageAsset: json['imageAsset'],
+      recipe: json['recipe'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'category': category,
+      'description': description,
+      'imageAsset': imageAsset,
+      'recipe': recipe,
+    };
+  }
+
   static List<Dish> get dishes => [
         Dish(
           id: '1',

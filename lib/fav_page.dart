@@ -1,15 +1,28 @@
-import 'package:flutter/material.dart';
+// fav_page.dart
 
-class MyFavourites extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:cookingrecipe/list/favlist.dart'; // Import FavList
+import 'package:cookingrecipe/widgets/myfavgridview.dart'; // Import MyFavGridView
+
+class MyFavourites extends StatelessWidget {
   const MyFavourites({super.key});
 
   @override
-  State<MyFavourites> createState() => _MyFavouritesState();
-}
-
-class _MyFavouritesState extends State<MyFavourites> {
-  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    // Access the list of favorite dishes from FavList
+    final favDishes = FavList.favDishes;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Favorites'),
+      ),
+      body: ListView.builder(
+        itemCount: favDishes.length,
+        itemBuilder: (context, index) {
+          final dish = favDishes[index];
+          return MyFavGridView(dish: dish);
+        },
+      ),
+    );
   }
 }

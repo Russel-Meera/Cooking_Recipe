@@ -1,6 +1,5 @@
 import 'package:cookingrecipe/dishes_grid.dart';
 import 'package:cookingrecipe/fav_page.dart';
-import 'package:cookingrecipe/list/list.dart';
 import 'package:cookingrecipe/search_page.dart';
 import 'package:flutter/material.dart';
 

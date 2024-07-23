@@ -1,5 +1,7 @@
 import 'package:cookingrecipe/dishes_grid.dart';
 import 'package:cookingrecipe/fav_page.dart';
+import 'package:cookingrecipe/list/list.dart';
+import 'package:cookingrecipe/search_page.dart';
 import 'package:flutter/material.dart';
 
 class MyLandingPage extends StatefulWidget {
@@ -11,9 +13,7 @@ class MyLandingPage extends StatefulWidget {
 
 class _MyLandingPageState extends State<MyLandingPage> {
   int _selectedPage = 0;
-  final _pageOption = const [
-    MyDishesGrid(),
-  ];
+  final _pageOption = const [MyDishesGrid(), SearchPage(), MyFavourites()];
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +29,16 @@ class _MyLandingPageState extends State<MyLandingPage> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
+            icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            label: 'People',
+            icon: Icon(Icons.search),
+            label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.amp_stories),
-            label: 'Stories',
+            icon: Icon(Icons.favorite),
+            label: 'Favourites',
           ),
         ],
         onTap: (index) {

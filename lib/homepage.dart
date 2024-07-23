@@ -20,7 +20,7 @@ class _MyLandingPageState extends State<MyLandingPage> {
       appBar: AppBar(
         title: const Text('Russel Jake Meera'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite))
+          IconButton(onPressed: () {}, icon: const Icon(Icons.bookmark))
         ],
       ),
       body: _pageOption[_selectedPage],

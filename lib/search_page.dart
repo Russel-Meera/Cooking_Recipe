@@ -63,10 +63,10 @@ class _SearchPageState extends State<SearchPage> {
           Expanded(
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Number of columns
-                childAspectRatio: 3 / 2, // Aspect ratio of the items
-                crossAxisSpacing: 10, // Horizontal space between items
-                mainAxisSpacing: 10, // Vertical space between items
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
               ),
               itemCount: _filteredDishes.length,
               itemBuilder: (context, index) {

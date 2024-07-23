@@ -1,7 +1,5 @@
-// widgets/myfavgridview.dart
-
 import 'package:flutter/material.dart';
-import 'package:cookingrecipe/list/list.dart'; // Import your Dish model
+import 'package:cookingrecipe/list/list.dart';
 
 class MyFavGridView extends StatelessWidget {
   final Dish dish;
@@ -18,9 +16,7 @@ class MyFavGridView extends StatelessWidget {
         height: 50,
       ),
       title: Text(dish.name),
-      onTap: () {
-        // Add navigation or any other interaction
-      },
+      onTap: () {},
     );
   }
 }

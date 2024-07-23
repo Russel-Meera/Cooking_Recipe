@@ -42,9 +42,6 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Dishes'),
-      ),
       body: Column(
         children: [
           Padding(

@@ -18,14 +18,19 @@ class _MyLandingPageState extends State<MyLandingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Russel Jake Meera'),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.bookmark))
-        ],
+        title: const Text('Reciply'),
+        centerTitle: true,
+        // actions: [
+        //   IconButton(onPressed: () {}, icon: const Icon(Icons.bookmark))
+        // ],
       ),
       body: _pageOption[_selectedPage],
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedPage,
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
+        elevation: 20,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

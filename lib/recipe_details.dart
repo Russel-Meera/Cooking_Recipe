@@ -1,9 +1,7 @@
-// recipe_details.dart
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cookingrecipe/list/list.dart';
-import 'package:cookingrecipe/list/favlist.dart'; // Import favlist.dart
+import 'package:cookingrecipe/list/favlist.dart';
 
 class RecipeDetails extends StatefulWidget {
   final Dish dish;
@@ -21,7 +19,6 @@ class _RecipeDetailsState extends State<RecipeDetails> {
   @override
   void initState() {
     super.initState();
-    // Initialize isSaved based on FavList
     isSaved = FavList.isDishSaved(widget.dish);
   }
 
@@ -34,7 +31,6 @@ class _RecipeDetailsState extends State<RecipeDetails> {
   void toggleSave() {
     setState(() {
       if (isSaved) {
-        // Optionally handle removing from favorites if needed
       } else {
         FavList.addDish(widget.dish);
       }

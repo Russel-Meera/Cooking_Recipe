@@ -24,12 +24,15 @@ class Mygridview extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            AspectRatio(
-              aspectRatio: 3 / 2,
-              child: Image.asset(
-                dish.imageAsset,
-                fit: BoxFit.cover,
-                width: double.infinity,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: AspectRatio(
+                aspectRatio: 3 / 2,
+                child: Image.asset(
+                  dish.imageAsset,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
               ),
             ),
             Positioned(

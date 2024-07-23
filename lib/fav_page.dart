@@ -11,14 +11,23 @@ class MyFavourites extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favorites'),
+        title: const Text('Saved Recipe'),
       ),
-      body: ListView.builder(
-        itemCount: favDishes.length,
-        itemBuilder: (context, index) {
-          final dish = favDishes[index];
-          return MyFavGridView(dish: dish);
-        },
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: ListView.builder(
+            itemCount: favDishes.length,
+            itemBuilder: (context, index) {
+              final dish = favDishes[index];
+              return MyFavGridView(dish: dish);
+            },
+          ),
+        ),
       ),
     );
   }

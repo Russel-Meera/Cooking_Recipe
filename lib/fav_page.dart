@@ -1,3 +1,4 @@
+import 'package:cookingrecipe/list/likedlist.dart';
 import 'package:flutter/material.dart';
 import 'package:cookingrecipe/list/favlist.dart';
 import 'package:cookingrecipe/widgets/myfavgridview.dart';
@@ -10,23 +11,37 @@ class MyFavourites extends StatefulWidget {
   _MyFavouritesState createState() => _MyFavouritesState();
 }
 
-class _MyFavouritesState extends State<MyFavourites> {
+class _MyFavouritesState extends State<MyFavourites> with SingleTickerProviderStateMixin {
+  
+  late TabController _tabController;
+  
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
     FavList.init().then((_) {
       setState(() {});
     });
+     LikedList.init().then((_) {
+      setState(() {});
+    });
+  }
+
+    @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final favDishes = FavList.favDishes;
+    final likedDishes = LikedList.likedDishes;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Saved Recipe",
+          "Recipes",
           style: GoogleFonts.robotoSlab(
             textStyle: const TextStyle(
               fontSize: 20,
@@ -35,21 +50,38 @@ class _MyFavouritesState extends State<MyFavourites> {
           ),
         ),
         backgroundColor: Colors.amber[400],
+           bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(text: 'Saved Recipe'),
+            Tab(text: 'Liked Recipe'),
+          ],
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ListView.builder(
-            itemCount: favDishes.length,
-            itemBuilder: (context, index) {
-              final dish = favDishes[index];
-              return MyFavGridView(dish: dish);
-            },
-          ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildRecipeList(favDishes),
+          _buildRecipeList(likedDishes),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecipeList(List dishes) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: ListView.builder(
+          itemCount: dishes.length,
+          itemBuilder: (context, index) {
+            final dish = dishes[index];
+            return MyFavGridView(dish: dish);
+          },
         ),
       ),
     );

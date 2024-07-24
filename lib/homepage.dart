@@ -4,7 +4,9 @@ import 'package:cookingrecipe/search_page.dart';
 import 'package:flutter/material.dart';
 
 class MyLandingPage extends StatefulWidget {
-  const MyLandingPage({super.key});
+  final VoidCallback onLogout;
+  
+  const MyLandingPage({super.key, required this.onLogout});
 
   @override
   State<MyLandingPage> createState() => _MyLandingPageState();
@@ -17,6 +19,35 @@ class _MyLandingPageState extends State<MyLandingPage> {
     const SearchPage(),
     const MyFavourites()
   ];
+
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Logout'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); 
+                widget.onLogout(); 
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +77,8 @@ class _MyLandingPageState extends State<MyLandingPage> {
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favourites',
+            icon: Icon(Icons.bookmark),
+            label: 'Bookmark',
           ),
         ],
         onTap: (index) {
@@ -71,8 +102,8 @@ class _MyLandingPageState extends State<MyLandingPage> {
               title: Text('Profile'),
             ),
             const ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profile'),
+              leading: Icon(Icons.favorite),
+              title: Text('Liked Recipes'),
             ),
             ListTile(
               leading: const Icon(Icons.person),
@@ -81,6 +112,11 @@ class _MyLandingPageState extends State<MyLandingPage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const MyFavourites()));
               },
+            ),
+             ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: _showLogoutDialog, 
             ),
           ],
         ),

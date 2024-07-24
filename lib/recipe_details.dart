@@ -1,3 +1,4 @@
+import 'package:cookingrecipe/list/likedlist.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cookingrecipe/list/list.dart';
@@ -13,18 +14,24 @@ class RecipeDetails extends StatefulWidget {
 }
 
 class _RecipeDetailsState extends State<RecipeDetails> {
-  bool isLiked = false;
   late bool isSaved;
+  late bool isHeart;
 
   @override
   void initState() {
     super.initState();
     isSaved = FavList.isDishSaved(widget.dish);
+    isHeart = LikedList.isDishHeart(widget.dish);
   }
 
-  void toggleLike() {
+  void toggleLike() async {
     setState(() {
-      isLiked = !isLiked;
+      if (isHeart) {
+        LikedList.removeDish(widget.dish);
+      } else {
+        LikedList.addDish(widget.dish);
+      }
+      isHeart = !isHeart;
     });
   }
 
@@ -87,8 +94,8 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                           ),
                           IconButton(
                             icon: Icon(
-                              isLiked ? Icons.favorite : Icons.favorite_border,
-                              color: isLiked ? Colors.red : Colors.grey,
+                              isHeart ? Icons.favorite : Icons.favorite_border,
+                              color: isHeart ? Colors.red : Colors.grey,
                             ),
                             onPressed: toggleLike,
                           ),

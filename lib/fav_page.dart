@@ -2,7 +2,9 @@ import 'package:cookingrecipe/list/likedlist.dart';
 import 'package:flutter/material.dart';
 import 'package:cookingrecipe/list/favlist.dart';
 import 'package:cookingrecipe/widgets/myfavgridview.dart';
+import 'package:cookingrecipe/widgets/mylikelistview.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cookingrecipe/list/list.dart';
 
 class MyFavourites extends StatefulWidget {
   const MyFavourites({super.key});
@@ -11,10 +13,10 @@ class MyFavourites extends StatefulWidget {
   _MyFavouritesState createState() => _MyFavouritesState();
 }
 
-class _MyFavouritesState extends State<MyFavourites> with SingleTickerProviderStateMixin {
-  
+class _MyFavouritesState extends State<MyFavourites>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -22,12 +24,12 @@ class _MyFavouritesState extends State<MyFavourites> with SingleTickerProviderSt
     FavList.init().then((_) {
       setState(() {});
     });
-     LikedList.init().then((_) {
+    LikedList.init().then((_) {
       setState(() {});
     });
   }
 
-    @override
+  @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
@@ -50,7 +52,7 @@ class _MyFavouritesState extends State<MyFavourites> with SingleTickerProviderSt
           ),
         ),
         backgroundColor: Colors.amber[400],
-           bottom: TabBar(
+        bottom: TabBar(
           controller: _tabController,
           tabs: const [
             Tab(text: 'Saved Recipe'),
@@ -61,14 +63,14 @@ class _MyFavouritesState extends State<MyFavourites> with SingleTickerProviderSt
       body: TabBarView(
         controller: _tabController,
         children: [
-          _buildRecipeList(favDishes),
-          _buildRecipeList(likedDishes),
+          _buildRecipeList(favDishes, true),
+          _buildRecipeList(likedDishes, false),
         ],
       ),
     );
   }
 
-  Widget _buildRecipeList(List dishes) {
+  Widget _buildRecipeList(List<Dish> dishes, bool isFav) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -80,7 +82,9 @@ class _MyFavouritesState extends State<MyFavourites> with SingleTickerProviderSt
           itemCount: dishes.length,
           itemBuilder: (context, index) {
             final dish = dishes[index];
-            return MyFavGridView(dish: dish);
+            return isFav
+                ? MyFavGridView(dish: dish)
+                : MyLikeListView(dish: dish);
           },
         ),
       ),

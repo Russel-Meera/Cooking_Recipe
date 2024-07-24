@@ -17,6 +17,8 @@ class _MySignUpState extends State<MySignUp> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
@@ -53,99 +55,174 @@ class _MySignUpState extends State<MySignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Sign Up"),
-      ),
       body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color.fromARGB(255, 212, 147, 72),
+              Color.fromARGB(255, 191, 209, 161),
+              Color.fromARGB(255, 191, 203, 88),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        padding: const EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(100.0, 0, 100.0, 0),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 200,
-                  width: 400,
-                  child: Image.asset(''),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.browse_gallery,
+                  size: 100, color: Color.fromARGB(255, 137, 55, 28)),
+              const SizedBox(height: 20),
+              const Text(
+                'Sign Up',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Itim',
+                  color: Color.fromARGB(255, 179, 103, 41),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _email,
-                  decoration: const InputDecoration(
-                    label: Text("Enter Your Email"),
-                    hintText: "Email",
-                    border: OutlineInputBorder(),
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _email,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  hintText: 'Enter your email',
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Color.fromARGB(255, 238, 238, 238),
+                  errorStyle: TextStyle(
+                    color: Color.fromARGB(255, 248, 241, 241),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    } else if (!RegExp(
-                            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                        .hasMatch(value)) {
-                      return 'Please enter a valid email address';
-                    }
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  } else if (!RegExp(
+                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                      .hasMatch(value)) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20.0),
+              TextFormField(
+                controller: _password,
+                decoration: InputDecoration(
+                  hintText: 'Enter your password',
+                  border: const OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                  errorStyle: const TextStyle(
+                    color: Color.fromARGB(255, 248, 241, 241),
+                  ),
+                ),
+                obscureText: _obscurePassword,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  } else if (!RegExp(
+                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
+                      .hasMatch(value)) {
+                    return 'must contain 8 characters, one uppercase letter, one lowercase letter.';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20.0),
+              TextFormField(
+                controller: _confirmPassword,
+                decoration: InputDecoration(
+                  hintText: 'Confirm your password',
+                  border: const OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureConfirmPassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                      });
+                    },
+                  ),
+                  errorStyle: const TextStyle(
+                    color: Color.fromARGB(255, 248, 241, 241),
+                  ),
+                ),
+                obscureText: _obscureConfirmPassword,
+                // ignore: body_might_complete_normally_nullable
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  } else if (!RegExp(
+                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
+                      .hasMatch(value)) {
+                    return 'must contain 8 characters, one uppercase letter, one lowercase letter.';
+                  } else if (value != _password.text) {
+                    return "The password doesn't match!";
+                  } else if (value == _password.text) {
                     return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: _password,
-                  decoration: const InputDecoration(
-                    label: Text("Enter Your Password"),
-                    hintText: "Password",
-                    border: OutlineInputBorder(),
+                  }
+                },
+              ),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  _submit();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 47, 20, 7),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: const BorderSide(color: Colors.white),
                   ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    } else if (!RegExp(
-                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
-                        .hasMatch(value)) {
-                      return 'must contain 8 characters, one uppercase letter, one lowercase letter.';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: _confirmPassword,
-                  decoration: const InputDecoration(
-                    label: Text("Confirm Password"),
-                    hintText: "Confirm Password",
-                    border: OutlineInputBorder(),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30.0,
+                    vertical: 15.0,
                   ),
-                  obscureText: true,
-                  // ignore: body_might_complete_normally_nullable
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    } else if (!RegExp(
-                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
-                        .hasMatch(value)) {
-                      return 'must contain 8 characters, one uppercase letter, one lowercase letter.';
-                    } else if (value != _password.text) {
-                      return "The password doesn't match!";
-                    } else if (value == _password.text) {
-                      return null;
-                    }
-                  },
                 ),
-                const SizedBox(
-                  height: 10,
+                child: const Text(
+                  'Sign Up',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: _submit,
-                  child: const Text("Sign Up"),
-                )
-              ],
-            ),
+              ),
+              const SizedBox(height: 20.0),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyApp()),
+                  );
+                },
+                child: const Text(
+                  "Already have an account? Login here.",
+                  style: TextStyle(color: Color.fromARGB(255, 100, 102, 64)),
+                ),
+              ),
+            ],
           ),
         ),
       ),

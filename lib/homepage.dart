@@ -4,6 +4,7 @@ import 'package:cookingrecipe/main.dart';
 import 'package:cookingrecipe/profile.dart';
 import 'package:cookingrecipe/search_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyLandingPage extends StatefulWidget {
   final VoidCallback onLogout;
@@ -23,6 +24,12 @@ class _MyLandingPageState extends State<MyLandingPage> {
     const MyFavourites()
   ];
 
+  Future<void> _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    widget.onLogout();
+  }
+
   void _showLogoutDialog() {
     showDialog(
       context: context,
@@ -38,8 +45,10 @@ class _MyLandingPageState extends State<MyLandingPage> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.of(context).push(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _logout();
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) => const MyApp(),
                   ),

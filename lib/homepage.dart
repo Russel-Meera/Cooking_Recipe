@@ -1,6 +1,7 @@
 import 'package:cookingrecipe/dishes_grid.dart';
 import 'package:cookingrecipe/fav_page.dart';
 import 'package:cookingrecipe/main.dart';
+import 'package:cookingrecipe/profile.dart';
 import 'package:cookingrecipe/search_page.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,8 @@ class _MyLandingPageState extends State<MyLandingPage> {
   final _pageOption = [
     const MyDishesGrid(),
     const SearchPage(),
-    const MyFavourites()
+    const MyFavourites(),
+    const MyProfile()
   ];
 
   void _showLogoutDialog() {
@@ -98,6 +100,14 @@ class _MyLandingPageState extends State<MyLandingPage> {
               child: Icon(Icons.person),
             ),
              ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const MyProfile()));
+              },
+            ),
+             ListTile(
               leading: const Icon(Icons.settings),
               title: const Text('Dark mode'),
               trailing: Switch(
@@ -108,7 +118,7 @@ class _MyLandingPageState extends State<MyLandingPage> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.person),
+              leading: const Icon(Icons.bookmark),
               title: const Text('Bookmarks'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(

@@ -50,12 +50,19 @@ class _MyFavouritesState extends State<MyFavourites> with SingleTickerProviderSt
           ),
         ),
         backgroundColor: Colors.amber[400],
-           bottom: TabBar(
+        bottom: TabBar(
           controller: _tabController,
           tabs: const [
             Tab(text: 'Saved Recipe'),
             Tab(text: 'Liked Recipe'),
           ],
+          labelColor: Colors.black, 
+          unselectedLabelColor: Colors.black, 
+          indicator: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: Color.fromARGB(255, 251, 249, 249), width: 6),
+            ),
+          ),
         ),
       ),
       body: TabBarView(

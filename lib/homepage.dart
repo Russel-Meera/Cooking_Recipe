@@ -1,5 +1,6 @@
 import 'package:cookingrecipe/dishes_grid.dart';
 import 'package:cookingrecipe/fav_page.dart';
+import 'package:cookingrecipe/main.dart';
 import 'package:cookingrecipe/search_page.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,6 @@ class _MyLandingPageState extends State<MyLandingPage> {
     const SearchPage(),
     const MyFavourites()
   ];
-
 
   void _showLogoutDialog() {
     showDialog(
@@ -47,7 +47,11 @@ class _MyLandingPageState extends State<MyLandingPage> {
       },
     );
   }
-
+ 
+  void _changeTheme(bool isDarkMode) {
+    ThemeData themeData = isDarkMode ? MyApp.darkTheme : MyApp.lightTheme;
+    MyApp.themeNotifier.value = themeData;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,21 +97,19 @@ class _MyLandingPageState extends State<MyLandingPage> {
             const DrawerHeader(
               child: Icon(Icons.person),
             ),
-            const ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profile'),
-            ),
-            const ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profile'),
-            ),
-            const ListTile(
-              leading: Icon(Icons.favorite),
-              title: Text('Liked Recipes'),
+             ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Dark mode'),
+              trailing: Switch(
+                value: MyApp.themeNotifier.value.brightness == Brightness.dark,
+                onChanged: (value) {
+                  _changeTheme(value);
+                },
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.person),
-              title: const Text('Profile'),
+              title: const Text('Bookmarks'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const MyFavourites()));

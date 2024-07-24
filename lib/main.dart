@@ -4,21 +4,23 @@ import 'package:cookingrecipe/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? email = prefs.getString('email');
+  runApp(MyApp(email: email));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String? email;
+  const MyApp({super.key, this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Recipe'),
+      home: email != null
+          ? MyLandingPage(
+              email: email!,
+              onLogout: () {},
+            )
+          : const MyHomePage(title: 'Recipe'),
     );
   }
 }
@@ -70,32 +77,77 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _submit() async {
-    if (_formKey.currentState!.validate()) {}
-    String email = _email.text;
-    String password = _password.text;
+    if (_formKey.currentState!.validate()) {
+      String email = _email.text;
+      String password = _password.text;
+
+      try {
+        User? user = await _auth.signInWithEmailAndPassword(email, password);
+
+        if (user != null) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('email', email);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MyLandingPage(
+                email: _email.text,
+                onLogout: () => _handleLogout(context),
+              ),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Wrong email or password"),
+            ),
+          );
+        }
+      } catch (e) {
+        print("Error signing in: $e");
+      }
+    }
+  }
+
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  Future<void> signInWithGoogle() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      clientId:
+          '328517508690-sv08uu8d93hr5t7rtln66unnh1ut8e90.apps.googleusercontent.com',
+    );
 
     try {
-      User? user = await _auth.signInWithEmailAndPassword(email, password);
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
 
-      if (user != null) {
-        Navigator.pushReplacement(
-          context,
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          idToken: googleSignInAuthentication.idToken,
+          accessToken: googleSignInAuthentication.accessToken,
+        );
+
+        UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
+        String email = userCredential.user?.email ?? "";
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('email', email);
+
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => MyLandingPage(
-              email: _email.text,
-              onLogout: () {},
+              email: email,
+              onLogout: () => _handleLogout(context),
             ),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Wrong email or password"),
           ),
         );
       }
     } catch (e) {
-      print("Error signing in: $e");
+      debugPrint('Some error occurred: $e');
     }
   }
 
@@ -218,7 +270,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 10.0),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  signInWithGoogle();
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 191, 136, 91),
                   shape: RoundedRectangleBorder(
@@ -232,20 +286,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 child: const Text(
                   'Sign in with Google',
-                  style: TextStyle(color: Color.fromARGB(255, 60, 29, 8)),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(height: 20.0),
-              GestureDetector(
-                onTap: () {
+              TextButton(
+                onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const MySignUp()),
+                    MaterialPageRoute(
+                      builder: (context) => const MySignUp(),
+                    ),
                   );
                 },
                 child: const Text(
-                  "Don't have an account? Sign up here.",
-                  style: TextStyle(color: Color.fromARGB(255, 100, 102, 64)),
+                  'Don\'t have an account? Sign up',
+                  style: TextStyle(color: Colors.brown),
                 ),
               ),
             ],

@@ -1,5 +1,6 @@
 import 'package:cookingrecipe/dishes_grid.dart';
 import 'package:cookingrecipe/fav_page.dart';
+import 'package:cookingrecipe/profile.dart';
 import 'package:cookingrecipe/search_page.dart';
 import 'package:flutter/material.dart';
 
@@ -96,13 +97,23 @@ class _MyLandingPageState extends State<MyLandingPage> {
                 child: Icon(Icons.person),
               ),
             ),
-            const ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profile'),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => MyProfile(
+                      email: widget.email,
+                    ),
+                  ),
+                );
+              },
             ),
-            const ListTile(
-              leading: Icon(Icons.favorite),
-              title: Text('Liked Recipes'),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Dark Mode'),
+              onTap: () {},
             ),
             ListTile(
               leading: const Icon(Icons.logout),

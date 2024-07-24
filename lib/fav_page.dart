@@ -58,6 +58,13 @@ class _MyFavouritesState extends State<MyFavourites>
             Tab(text: 'Saved Recipe'),
             Tab(text: 'Liked Recipe'),
           ],
+          labelColor: Colors.black, 
+          unselectedLabelColor: Colors.black, 
+          indicator: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: Color.fromARGB(255, 251, 249, 249), width: 6),
+            ),
+          ),
         ),
       ),
       body: TabBarView(

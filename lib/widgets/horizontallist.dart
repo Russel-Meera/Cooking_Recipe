@@ -1,10 +1,69 @@
-import 'package:cookingrecipe/recipe_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cookingrecipe/recipe_details.dart';
 import 'package:cookingrecipe/list/list.dart';
 
 class MyHorizontal extends StatelessWidget {
-  const MyHorizontal({super.key, required this.dish});
+  const MyHorizontal({super.key, required Dish dish});
+
+  @override
+  Widget build(BuildContext context) {
+    final dishes = Dish.dishes;
+
+    final porkRecipes = dishes.where((dish) => dish.category.contains('Pork')).toList();
+    final fishRecipes = dishes.where((dish) => dish.category.contains('Fish')).toList();
+    final chickenRecipes = dishes.where((dish) => dish.category.contains('Chicken')).toList();
+
+    return Column(
+      children: [
+        CategorySection(category: 'Pork Recipe', dishes: porkRecipes),
+        CategorySection(category: 'Fish Recipe', dishes: fishRecipes),
+        CategorySection(category: 'Chicken Recipe', dishes: chickenRecipes),
+      ],
+    );
+  }
+}
+
+class CategorySection extends StatelessWidget {
+  const CategorySection({super.key, required this.category, required this.dishes});
+
+  final String category;
+  final List<Dish> dishes;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            category,
+            style: GoogleFonts.robotoSlab(
+              textStyle: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 200,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: dishes.length,
+            itemBuilder: (context, index) {
+              return MyHorizontalItem(dish: dishes[index]);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class MyHorizontalItem extends StatelessWidget {
+  const MyHorizontalItem({super.key, required this.dish});
 
   final Dish dish;
 

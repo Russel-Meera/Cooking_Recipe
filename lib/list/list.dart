@@ -41,7 +41,7 @@ class Dish {
         Dish(
           id: '1',
           name: 'Adobo',
-          category: 'Main Course',
+          category: 'Chicken',
           description:
               'A popular Filipino dish made with chicken or pork simmered in soy sauce, vinegar, garlic, and spices.',
           imageAsset: 'assets/adobo.jpg',
@@ -51,7 +51,7 @@ class Dish {
         Dish(
           id: '2',
           name: 'Sinigang na Baboy',
-          category: 'Soup',
+          category: 'Pork',
           description: 'A sour tamarind-based soup with pork and vegetables.',
           imageAsset: 'assets/sinigang_na_baboy.jpg',
           recipe:
@@ -60,7 +60,7 @@ class Dish {
         Dish(
           id: '3',
           name: 'Lechon Kawali',
-          category: 'Main Course',
+          category: 'Pork',
           description:
               'Crispy deep-fried pork belly served with a side of liver sauce.',
           imageAsset: 'assets/lechon_kawali.jpg',
@@ -70,7 +70,7 @@ class Dish {
         Dish(
           id: '4',
           name: 'Kare-Kare',
-          category: 'Main Course',
+          category: 'Pork',
           description:
               'A peanut-based stew with oxtail, tripe, and vegetables, often served with bagoong (fermented shrimp paste).',
           imageAsset: 'assets/kare_kare.jpg',
@@ -80,7 +80,7 @@ class Dish {
         Dish(
           id: '5',
           name: 'Bistek Tagalog',
-          category: 'Main Course',
+          category: 'Pork',
           description:
               'Filipino beef steak marinated in soy sauce and calamansi, then cooked with onions.',
           imageAsset: 'assets/bistek_tagalog.jpeg',
@@ -90,7 +90,7 @@ class Dish {
         Dish(
           id: '6',
           name: 'Menudo',
-          category: 'Main Course',
+          category: 'Pork',
           description:
               'A hearty stew made with pork, liver, and vegetables in a tomato-based sauce.',
           imageAsset: 'assets/menudo.jpg',
@@ -100,7 +100,7 @@ class Dish {
         Dish(
           id: '7',
           name: 'Pinakbet',
-          category: 'Main Course',
+          category: 'Chicken',
           description:
               'A vegetable dish with squash, string beans, and eggplant, flavored with bagoong.',
           imageAsset: 'assets/pinakbet.jpg',
@@ -109,18 +109,18 @@ class Dish {
         ),
         Dish(
           id: '8',
-          name: 'Pork Afritada',
-          category: 'Main Course',
+          name: 'Chicken Afritada',
+          category: 'Chicken',
           description:
               'Pork stew cooked with tomatoes, potatoes, carrots, and bell peppers.',
           imageAsset: 'assets/pork_afritada.jpg',
           recipe:
-              '1. Sauté pork and vegetables...\n2. Cook with tomato sauce and spices...',
+              '1. Sauté chicken and vegetables...\n2. Cook with tomato sauce and spices...',
         ),
         Dish(
           id: '9',
           name: 'Laing',
-          category: 'Main Course',
+          category: 'Pork',
           description:
               'Spicy dish made from dried taro leaves cooked in coconut milk with chili and shrimp paste.',
           imageAsset: 'assets/laing.jpg',
@@ -130,7 +130,7 @@ class Dish {
         Dish(
           id: '10',
           name: 'Sinigang na Isda',
-          category: 'Soup',
+          category: 'Fish',
           description:
               'A sour fish soup with vegetables, flavored with tamarind.',
           imageAsset: 'assets/sinigang_na_isda.jpeg',

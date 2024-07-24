@@ -1,8 +1,7 @@
-import 'package:cookingrecipe/list/list.dart';
-import 'package:cookingrecipe/widgets/horizontallist.dart';
-import 'package:cookingrecipe/widgets/mygridview.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cookingrecipe/list/list.dart';
+import 'package:cookingrecipe/widgets/mygridview.dart';
 
 class MyDishesGrid extends StatefulWidget {
   const MyDishesGrid({super.key});
@@ -12,8 +11,12 @@ class MyDishesGrid extends StatefulWidget {
 }
 
 class _MyDishesGridState extends State<MyDishesGrid> {
+  String selectedCategory = 'Pork';
+
   @override
   Widget build(BuildContext context) {
+    List<Dish> filteredDishes = Dish.dishes.where((dish) => dish.category == selectedCategory).toList();
+    
     return Scaffold(
       body: Column(
         children: [
@@ -43,13 +46,36 @@ class _MyDishesGridState extends State<MyDishesGrid> {
               color: Colors.amber[400],
             ),
             height: 80,
-            child: ListView.builder(
+            child: ListView(
               scrollDirection: Axis.horizontal,
-              itemCount: Dish.dishes.length,
-              itemBuilder: (context, index) {
-                final dish = Dish.dishes[index];
-                return MyHorizontal(dish: dish);
-              },
+              children: ['Pork', 'Chicken', 'Fish'].map((category) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = category;
+                    });
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: selectedCategory == category ? Colors.orange : Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Text(
+                      category,
+                      style: GoogleFonts.robotoSlab(
+                        textStyle: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: selectedCategory == category ? Colors.white : Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
           ),
           Row(
@@ -80,16 +106,15 @@ class _MyDishesGridState extends State<MyDishesGrid> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 3 / 2,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                     ),
-                    itemCount: Dish.dishes.length,
+                    itemCount: filteredDishes.length,
                     itemBuilder: (context, index) {
-                      final currentDish = Dish.dishes[index];
+                      final currentDish = filteredDishes[index];
                       return Mygridview(dish: currentDish);
                     },
                   ),

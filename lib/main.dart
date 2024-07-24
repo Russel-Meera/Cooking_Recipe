@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cookingrecipe/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,19 +8,58 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+  static ValueNotifier<ThemeData> themeNotifier = ValueNotifier(lightTheme);
+
+  static final ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    primaryColor: Colors.amber[400],
+    tabBarTheme: const TabBarTheme(
+      labelColor: Colors.black,
+      unselectedLabelColor: Colors.black,
+      indicator: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.black, width: 2),
+        ),
+      ),
+    ),
+  );
+
+  static final ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: Colors.amber[400],
+    tabBarTheme: const TabBarTheme(
+      labelColor: Colors.black,
+      unselectedLabelColor: Colors.black,
+      indicator: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.black, width: 2),
+        ),
+      ),
+    ),
+  );
+
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Recipe'),
+    return ValueListenableBuilder<ThemeData>(
+      valueListenable: MyApp.themeNotifier,
+      builder: (context, ThemeData currentTheme, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Recipe App',
+          theme: currentTheme,
+          home: const MyHomePage(title: 'Recipe'),
+        );
+      },
     );
   }
 }
@@ -36,8 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _handleLogout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    Navigator.pushAndRemoveUntil(
-      context,
+    Navigator.pushAndRemoveUntil(context,
       MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Recipe')),
       (Route<dynamic> route) => false,
     );

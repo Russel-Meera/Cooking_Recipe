@@ -1,5 +1,6 @@
 import 'package:cookingrecipe/dishes_grid.dart';
 import 'package:cookingrecipe/fav_page.dart';
+import 'package:cookingrecipe/main.dart';
 import 'package:cookingrecipe/profile.dart';
 import 'package:cookingrecipe/search_page.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +39,11 @@ class _MyLandingPageState extends State<MyLandingPage> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
-                widget.onLogout();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const MyApp(),
+                  ),
+                );
               },
               child: const Text('Logout'),
             ),
@@ -53,7 +57,14 @@ class _MyLandingPageState extends State<MyLandingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reciply'),
+        title: Container(
+          height: 70,
+          width: 70,
+          decoration: const BoxDecoration(),
+          child: Image.asset(
+            "assets/logo.png",
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.amber[400],
         // actions: [

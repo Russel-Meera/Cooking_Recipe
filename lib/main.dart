@@ -172,9 +172,11 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.browse_gallery,
-                  size: 100, color: Color.fromARGB(255, 137, 55, 28)),
-              const SizedBox(height: 20),
+              SizedBox(
+                height: 100,
+                width: 100,
+                child: Image.asset("assets/logo.png"),
+              ),
               const Text(
                 'Login',
                 style: TextStyle(

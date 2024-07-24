@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 
 class MyLandingPage extends StatefulWidget {
   final VoidCallback onLogout;
-  
-  const MyLandingPage({super.key, required this.onLogout});
+
+  const MyLandingPage({super.key, required this.onLogout, required this.email});
+
+  final String email;
 
   @override
   State<MyLandingPage> createState() => _MyLandingPageState();
@@ -19,7 +21,6 @@ class _MyLandingPageState extends State<MyLandingPage> {
     const SearchPage(),
     const MyFavourites()
   ];
-
 
   void _showLogoutDialog() {
     showDialog(
@@ -37,8 +38,8 @@ class _MyLandingPageState extends State<MyLandingPage> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); 
-                widget.onLogout(); 
+                Navigator.of(context).pop();
+                widget.onLogout();
               },
               child: const Text('Logout'),
             ),
@@ -47,7 +48,6 @@ class _MyLandingPageState extends State<MyLandingPage> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -113,10 +113,10 @@ class _MyLandingPageState extends State<MyLandingPage> {
                     builder: (context) => const MyFavourites()));
               },
             ),
-             ListTile(
+            ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
-              onTap: _showLogoutDialog, 
+              onTap: _showLogoutDialog,
             ),
           ],
         ),

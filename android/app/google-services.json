@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "328517508690",
+    "project_id": "reciftauthentication",
+    "storage_bucket": "reciftauthentication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328517508690:android:8e0cf2ec29813a8735c98b",
+        "android_client_info": {
+          "package_name": "com.example.cookingrecipe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALrruWmrVPt2nujOzv-_gL73onVMQkUhM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328517508690:android:be4adb0cacb3fc1235c98b",
+        "android_client_info": {
+          "package_name": "com.recify.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALrruWmrVPt2nujOzv-_gL73onVMQkUhM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

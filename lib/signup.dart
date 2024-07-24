@@ -1,153 +1,54 @@
-import 'package:cookingrecipe/firebase_options.dart';
 import 'package:cookingrecipe/homepage.dart';
-import 'package:cookingrecipe/signup.dart';
+import 'package:cookingrecipe/main.dart';
+import 'package:cookingrecipe/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? email = prefs.getString('email');
-  runApp(MyApp(email: email));
-}
-
-class MyApp extends StatelessWidget {
-  final String? email;
-  const MyApp({super.key, this.email});
+class MySignUp extends StatefulWidget {
+  const MySignUp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: email != null
-          ? MyLandingPage(
-              email: email!,
-              onLogout: () {},
-            )
-          : const MyHomePage(title: 'Recipe'),
-    );
-  }
+  State<MySignUp> createState() => _MySignUpState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final FirebaseAuthService _auth = FirebaseAuthService();
-
+class _MySignUpState extends State<MySignUp> {
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuthService _auth = FirebaseAuthService();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final TextEditingController _confirmPassword = TextEditingController();
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
     _email.dispose();
     _password.dispose();
+    _confirmPassword.dispose();
     super.dispose();
-  }
-
-  void _handleLogout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-          builder: (context) => const MyHomePage(title: 'Recipe')),
-      (Route<dynamic> route) => false,
-    );
   }
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyLandingPage(
+            email: _email.text,
+            onLogout: () {},
+          ),
+        ),
+      );
       String email = _email.text;
       String password = _password.text;
 
-      try {
-        User? user = await _auth.signInWithEmailAndPassword(email, password);
+      User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
-        if (user != null) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('email', email);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MyLandingPage(
-                email: _email.text,
-                onLogout: () => _handleLogout(context),
-              ),
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Wrong email or password"),
-            ),
-          );
-        }
-      } catch (e) {
-        print("Error signing in: $e");
+      if (user != null) {
+        print('User signed up');
+      } else {
+        print('User not signed up');
       }
-    }
-  }
-
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
-  Future<void> signInWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      clientId:
-          '328517508690-sv08uu8d93hr5t7rtln66unnh1ut8e90.apps.googleusercontent.com',
-    );
-
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
-
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken,
-        );
-
-        UserCredential userCredential =
-            await _firebaseAuth.signInWithCredential(credential);
-        String email = userCredential.user?.email ?? "";
-
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('email', email);
-
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => MyLandingPage(
-              email: email,
-              onLogout: () => _handleLogout(context),
-            ),
-          ),
-        );
-      }
-    } catch (e) {
-      debugPrint('Some error occurred: $e');
     }
   }
 
@@ -176,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   size: 100, color: Color.fromARGB(255, 137, 55, 28)),
               const SizedBox(height: 20),
               const Text(
-                'Login',
+                'Sign Up',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -245,6 +146,46 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               const SizedBox(height: 20.0),
+              TextFormField(
+                controller: _confirmPassword,
+                decoration: InputDecoration(
+                  hintText: 'Confirm your password',
+                  border: const OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureConfirmPassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                      });
+                    },
+                  ),
+                  errorStyle: const TextStyle(
+                    color: Color.fromARGB(255, 248, 241, 241),
+                  ),
+                ),
+                obscureText: _obscureConfirmPassword,
+                // ignore: body_might_complete_normally_nullable
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  } else if (!RegExp(
+                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
+                      .hasMatch(value)) {
+                    return 'must contain 8 characters, one uppercase letter, one lowercase letter.';
+                  } else if (value != _password.text) {
+                    return "The password doesn't match!";
+                  } else if (value == _password.text) {
+                    return null;
+                  }
+                },
+              ),
+              const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
                   _submit();
@@ -261,31 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 child: const Text(
-                  'Login',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10.0),
-              ElevatedButton(
-                onPressed: () {
-                  signInWithGoogle();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 191, 136, 91),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    side: const BorderSide(color: Colors.white),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30.0,
-                    vertical: 15.0,
-                  ),
-                ),
-                child: const Text(
-                  'Sign in with Google',
+                  'Sign Up',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -293,18 +210,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               const SizedBox(height: 20.0),
-              TextButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const MySignUp(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const MyApp()),
                   );
                 },
                 child: const Text(
-                  'Don\'t have an account? Sign up',
-                  style: TextStyle(color: Colors.brown),
+                  "Already have an account? Login here.",
+                  style: TextStyle(color: Color.fromARGB(255, 100, 102, 64)),
                 ),
               ),
             ],

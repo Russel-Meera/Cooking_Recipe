@@ -23,6 +23,9 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+apply plugin: 'com.google.gms.google-services'
+    id 'com.google.firebase.firebase-perf'
+
 android {
     namespace = "com.example.cookingrecipe"
     compileSdk = flutter.compileSdkVersion

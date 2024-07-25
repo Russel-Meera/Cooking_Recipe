@@ -111,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Future<void> signInWithGoogle() async {
+  signInWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn(
       clientId:
           '328517508690-sv08uu8d93hr5t7rtln66unnh1ut8e90.apps.googleusercontent.com',
